@@ -26,29 +26,34 @@
         }
 
         .card {
-            flex: 1;
+            flex: 0 0 128px;
+            /* ЗАКРЫТОЕ СОСТОЯНИЕ */
             height: 573px;
-            /* максимум */
             background: #f3e1d6;
             border-radius: 24px;
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            transform-origin: center;
+        }
+
+        .card.active {
+            border-radius: 32px;
+            background-image: url("https://picsum.photos/800/600?random=1");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .card.active .card-title {
+            display: none;
         }
 
         .card-inner {
             height: 500px;
-            /* скрытое состояние */
             padding: 24px;
             position: relative;
         }
-
-
-        .card.active {
-            height: 573px;
-            /* открытая */
-        }
-
 
         .card-number {
             font-size: 48px;
@@ -58,13 +63,15 @@
 
         .card-title {
             position: absolute;
-            bottom: 24px;
-            left: 24px;
+            top: 50%;
+            transform: translateX(-50%);
+            left: 0;
+            width: 100%;
             font-size: 14px;
             max-width: 140px;
+            rotate: -90deg;
         }
 
-        /* expanded content */
         .card-content {
             position: absolute;
             left: 24px;
@@ -72,17 +79,6 @@
             bottom: 24px;
             opacity: 0;
             pointer-events: none;
-        }
-
-
-        .card-content img {
-            width: 100%;
-            border-radius: 16px;
-            margin-bottom: 12px;
-        }
-
-        .card.active {
-            border-radius: 32px;
         }
     </style>
 </head>
@@ -95,59 +91,62 @@
                 <div class="card-number">01</div>
                 <div class="card-title">1 on 1 Networking</div>
                 <div class="card-content">
-                    <img src="https://picsum.photos/600/400?1">
                     <h3>Matchmaking Lunches</h3>
                     <p>Exclusive business lunches with curated matchmaking.</p>
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-inner">
-                <div class="card-number">01</div>
-                <div class="card-title">1 on 1 Networking</div>
+                <div class="card-number">02</div>
+                <div class="card-title">Advisory</div>
                 <div class="card-content">
-                    <img src="https://picsum.photos/600/400?1">
-                    <h3>Matchmaking Lunches</h3>
-                    <p>Exclusive business lunches with curated matchmaking.</p>
+                    <h3>Consulting</h3>
+                    <p>Professional advisory sessions.</p>
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-inner">
-                <div class="card-number">01</div>
-                <div class="card-title">1 on 1 Networking</div>
+                <div class="card-number">03</div>
+                <div class="card-title">Networking</div>
                 <div class="card-content">
-                    <img src="https://picsum.photos/600/400?1">
-                    <h3>Matchmaking Lunches</h3>
-                    <p>Exclusive business lunches with curated matchmaking.</p>
+                    <h3>Private Events</h3>
+                    <p>Curated networking experiences.</p>
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-inner">
-                <div class="card-number">01</div>
-                <div class="card-title">1 on 1 Networking</div>
+                <div class="card-number">04</div>
+                <div class="card-title">Compliance</div>
                 <div class="card-content">
-                    <img src="https://picsum.photos/600/400?1">
-                    <h3>Matchmaking Lunches</h3>
-                    <p>Exclusive business lunches with curated matchmaking.</p>
+                    <h3>Checks</h3>
+                    <p>Legal and compliance review.</p>
                 </div>
             </div>
         </div>
+
         <div class="card">
             <div class="card-inner">
-                <div class="card-number">01</div>
-                <div class="card-title">1 on 1 Networking</div>
+                <div class="card-number">05</div>
+                <div class="card-title">Strategy</div>
                 <div class="card-content">
-                    <img src="https://picsum.photos/600/400?1">
-                    <h3>Matchmaking Lunches</h3>
-                    <p>Exclusive business lunches with curated matchmaking.</p>
+                    <h3>Planning</h3>
+                    <p>Business strategy sessions.</p>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
         const cards = document.querySelectorAll('.card');
+
+        const CLOSED_WIDTH = 128;
+        const OPEN_WIDTH = 808;
 
         cards.forEach(card => {
             const inner = card.querySelector('.card-inner');
@@ -160,10 +159,10 @@
                     const ct = c.querySelector('.card-content');
 
                     gsap.to(c, {
-                        flexGrow: 1,
+                        flexBasis: CLOSED_WIDTH,
                         scaleY: 0.92,
                         duration: 0.8,
-                        ease: "power2.out"
+                        ease: "power3.out"
                     });
 
                     gsap.to(i, {
@@ -172,14 +171,18 @@
                         ease: "power2.out"
                     });
 
-                    gsap.to(ct, { opacity: 0, duration: 0.2 });
+                    gsap.to(ct, {
+                        opacity: 0,
+                        duration: 0.2
+                    });
+
                     c.classList.remove('active');
                 });
 
                 gsap.to(card, {
-                    flexGrow: 2,
+                    flexBasis: OPEN_WIDTH,
                     scaleY: 1,
-                    duration: 0.8,
+                    duration: 0.9,
                     ease: "power3.out"
                 });
 
@@ -192,16 +195,13 @@
                 gsap.to(content, {
                     opacity: 1,
                     duration: 0.4,
-                    delay: 0.2
+                    delay: 0.25
                 });
 
                 card.classList.add('active');
             });
         });
     </script>
-
-
-
 
 </body>
 
