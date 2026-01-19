@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flex Expand Row</title>
+
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #f7efe8;
+            font-family: Arial, sans-serif;
+        }
+
+        .row {
+            display: flex;
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .card {
+            flex: 1;
+            background: #f3e1d6;
+            border-radius: 24px;
+            padding: 24px;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-radius 0.3s ease;
+        }
+
+        .card-number {
+            font-size: 48px;
+            color: #f36b21;
+            font-weight: 600;
+        }
+
+        .card-title {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            font-size: 14px;
+            max-width: 140px;
+        }
+
+        /* expanded content */
+        .card-content {
+            opacity: 0;
+            max-width: 420px;
+            margin-top: 24px;
+        }
+
+        .card-content img {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 12px;
+        }
+
+        .card.active {
+            border-radius: 32px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="card">
+            <div class="card-number">01</div>
+            <div class="card-title">1 on 1 Networking</div>
+            <div class="card-content">
+                <img src="https://picsum.photos/600/400?1">
+                <h3>Matchmaking Lunches</h3>
+                <p>Exclusive business lunches with curated matchmaking.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-number">02</div>
+            <div class="card-title">1 on 1 Networking</div>
+            <div class="card-content">
+                <img src="https://picsum.photos/600/400?1">
+                <h3>Matchmaking Lunches</h3>
+                <p>Exclusive business lunches with curated matchmaking.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-number">03</div>
+            <div class="card-title">1 on 1 Networking</div>
+            <div class="card-content">
+                <img src="https://picsum.photos/600/400?1">
+                <h3>Matchmaking Lunches</h3>
+                <p>Exclusive business lunches with curated matchmaking.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-number">04</div>
+            <div class="card-title">1 on 1 Networking</div>
+            <div class="card-content">
+                <img src="https://picsum.photos/600/400?1">
+                <h3>Matchmaking Lunches</h3>
+                <p>Exclusive business lunches with curated matchmaking.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-number">05</div>
+            <div class="card-title">1 on 1 Networking</div>
+            <div class="card-content">
+                <img src="https://picsum.photos/600/400?1">
+                <h3>Matchmaking Lunches</h3>
+                <p>Exclusive business lunches with curated matchmaking.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+
+                // reset all
+                cards.forEach(c => {
+                    gsap.to(c, { flexGrow: 1, duration: 0.4, ease: "power2.out" });
+                    gsap.to(c.querySelector('.card-content'), {
+                        opacity: 0,
+                        duration: 0.2
+                    });
+                    c.classList.remove('active');
+                });
+
+                // expand clicked
+                gsap.to(card, {
+                    flexGrow: 4,
+                    duration: 0.6,
+                    ease: "power3.out"
+                });
+
+                const content = card.querySelector('.card-content');
+                if (content) {
+                    gsap.to(content, {
+                        opacity: 1,
+                        duration: 0.4,
+                        delay: 0.2
+                    });
+                }
+
+                card.classList.add('active');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
