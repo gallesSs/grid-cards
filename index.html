@@ -125,20 +125,31 @@
         cards.forEach(card => {
             card.addEventListener('click', () => {
 
-                // reset all
                 cards.forEach(c => {
-                    gsap.to(c, { flexGrow: 1, duration: 0.4, ease: "power2.out" });
-                    gsap.to(c.querySelector('.card-content'), {
-                        opacity: 0,
-                        duration: 0.2
+                    const content = c.querySelector('.card-content');
+
+                    gsap.to(c, {
+                        flexGrow: 1,
+                        scaleY: 0.92,
+                        duration: 0.8,
+                        ease: "power2.out"
                     });
+
+                    if (content) {
+                        gsap.to(content, {
+                            opacity: 0,
+                            duration: 0.2
+                        });
+                    }
+
                     c.classList.remove('active');
                 });
 
-                // expand clicked
+                // active card
                 gsap.to(card, {
-                    flexGrow: 4,
-                    duration: 0.6,
+                    flexGrow: 2,
+                    scaleY: 1,
+                    duration: 0.8,
                     ease: "power3.out"
                 });
 
@@ -156,7 +167,7 @@
         });
     </script>
 
-</body>
 
+</body>
 
 </html>
