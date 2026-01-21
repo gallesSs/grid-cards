@@ -1,208 +1,687 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
     <title>Flex Expand Row</title>
 
     <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+      /* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
 
-        body {
-            margin: 0;
-            padding: 40px;
-            background: #f7efe8;
-            font-family: Arial, sans-serif;
-        }
+      html,
+      body,
+      div,
+      span,
+      applet,
+      object,
+      iframe,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      blockquote,
+      pre,
+      a,
+      abbr,
+      acronym,
+      address,
+      big,
+      cite,
+      code,
+      del,
+      dfn,
+      em,
+      img,
+      ins,
+      kbd,
+      q,
+      s,
+      samp,
+      small,
+      strike,
+      strong,
+      sub,
+      sup,
+      tt,
+      var,
+      b,
+      u,
+      i,
+      center,
+      dl,
+      dt,
+      dd,
+      ol,
+      ul,
+      li,
+      fieldset,
+      form,
+      label,
+      legend,
+      table,
+      caption,
+      tbody,
+      tfoot,
+      thead,
+      tr,
+      th,
+      td,
+      article,
+      aside,
+      canvas,
+      details,
+      embed,
+      figure,
+      figcaption,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      output,
+      ruby,
+      section,
+      summary,
+      time,
+      mark,
+      audio,
+      video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+      }
+      /* HTML5 display-role reset for older browsers */
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      hgroup,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+      body {
+        line-height: 1;
+      }
+      ol,
+      ul {
+        list-style: none;
+      }
+      blockquote,
+      q {
+        quotes: none;
+      }
+      blockquote:before,
+      blockquote:after,
+      q:before,
+      q:after {
+        content: "";
+        content: none;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      * {
+        box-sizing: border-box;
+      }
 
-        .row {
-            display: flex;
-            gap: 16px;
-            align-items: stretch;
-        }
+      body {
+        margin: 0;
+        padding: 40px 0 0 0;
+        background: #f7efe8;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 1403px;
+        padding: 0;
+        margin: 0 auto;
+      }
 
+      .row {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        justify-content: center;
+      }
+
+      .card {
+        flex: 0 0 128px;
+        /* ЗАКРЫТОЕ СОСТОЯНИЕ */
+        height: 652px;
+        border-radius: 30px;
+        background: #2f3135;
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transform-origin: center;
+      }
+
+      .card.active {
+        border-radius: 32px;
+        background-image: url(./grid.png);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+      .card.active .card-title {
+        opacity: 0;
+      }
+
+      .card.active .card-number {
+        display: none;
+      }
+
+      .card-inner {
+        height: 500px;
+        padding: 24px;
+        position: relative;
+      }
+
+      .card-number {
+        font-size: 48px;
+        color: #f36b21;
+        font-weight: 600;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .card-number svg {
+        flex-shrink: 0;
+        width: 68px;
+        height: 68px;
+      }
+
+      .card-title {
+        position: absolute;
+        transform: translateX(-50%);
+        left: 0;
+        width: 100%;
+        color: #fff;
+        font-family: Onest;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 24px */
+        max-width: 140px;
+        rotate: -90deg;
+        text-wrap: nowrap;
+        bottom: 10px;
+      }
+
+      .card-content {
+        position: absolute;
+        left: 30px;
+        right: 30px;
+        bottom: 30px;
+        opacity: 0;
+        border-radius: 30px;
+        background: rgba(237, 237, 239, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        pointer-events: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-content h3 {
+        color: #fff;
+        font-family: Onest;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%; /* 24px */
+      }
+
+      .card-content p {
+        color: #fff;
+        font-family: Onest;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 120%; /* 21.6px */
+      }
+
+      @media screen and (max-width: 1650px) {
+        .container {
+          width: 1200px;
+        }
         .card {
-            flex: 0 0 128px;
-            /* ЗАКРЫТОЕ СОСТОЯНИЕ */
-            height: 573px;
-            background: #f3e1d6;
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transform-origin: center;
-        }
-
-        .card.active {
-            border-radius: 32px;
-            background-image: url("https://picsum.photos/800/600?random=1");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        .card.active .card-title {
-            display: none;
-        }
-
-        .card-inner {
-            height: 500px;
-            padding: 24px;
-            position: relative;
-        }
-
-        .card-number {
-            font-size: 48px;
-            color: #f36b21;
-            font-weight: 600;
+          flex: 0 0 90px;
         }
 
         .card-title {
-            position: absolute;
-            top: 50%;
-            transform: translateX(-50%);
-            left: 0;
-            width: 100%;
-            font-size: 14px;
-            max-width: 140px;
-            rotate: -90deg;
+          bottom: -30px;
+        }
+      }
+
+      @media screen and (max-width: 1280px) {
+        .container {
+          width: 1024px;
+        }
+
+        .card svg {
+          width: 48px;
+          height: 48px;
         }
 
         .card-content {
-            position: absolute;
-            left: 24px;
-            right: 24px;
-            bottom: 24px;
-            opacity: 0;
-            pointer-events: none;
+          left: 15px;
+          right: 15px;
+          bottom: 15px;
         }
+        .card-title,
+        .card-content h3 {
+          bottom: 90px;
+          font-size: 16px;
+        }
+        .card-content p {
+          font-size: 14px;
+        }
+        .card {
+          height: 500px;
+        }
+      }
+      @media screen and (max-width: 1064px) {
+        .container {
+          width: 800px;
+        }
+
+        .card {
+          height: 420px;
+          flex: 0 0 50px;
+        }
+        .card-title,
+        .card-content h3 {
+          bottom: 120px;
+          font-size: 14px;
+        }
+        .card svg {
+          height: 32px;
+          width: 32px;
+        }
+      }
+
+      @media screen and (max-width: 840px) {
+        .container {
+          width: 100%;
+          padding: 0 20px;
+        }
+
+        .card-content h3 {
+          font-size: 16px;
+        }
+
+        .card-number {
+          width: fit-content;
+          position: absolute;
+          right: 20px;
+          top: 20px;
+        }
+        .card-number svg {
+          width: 44px;
+          height: 44px;
+        }
+        .card-title {
+          transform: translate(0, -50%);
+          top: 50%;
+          left: 20px;
+          bottom: auto;
+          rotate: 0deg;
+          max-width: 206px;
+          text-wrap: wrap;
+        }
+
+        .card-inner {
+          padding: 20px;
+        }
+        .row {
+          flex-direction: column;
+        }
+        .card {
+          flex: 0 0 84px;
+        }
+      }
     </style>
-</head>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap");
+    </style>
+  </head>
 
-<body>
-
-    <div class="row">
+  <body>
+    <div class="container">
+      <div class="row">
         <div class="card">
-            <div class="card-inner">
-                <div class="card-number">01</div>
-                <div class="card-title">1 on 1 Networking</div>
-                <div class="card-content">
-                    <h3>Matchmaking Lunches</h3>
-                    <p>Exclusive business lunches with curated matchmaking.</p>
-                </div>
+          <div class="card-inner">
+            <div class="card-number">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 68 68"
+                fill="none">
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739L20.0786 50.0294ZM52.1341 17.9739V42.0156V17.9739ZM52.1341 17.9739H28.0925H52.1341Z"
+                  fill="white" />
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739M52.1341 17.9739V42.0156M52.1341 17.9739H28.0925"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
+            <div class="card-title">
+              All legal and administrative documentation
+            </div>
+            <div class="card-content">
+              <h3>All legal and administrative documentation</h3>
+              <p>
+                We prepare a complete set of documents required for your
+                business operations, including incorporation papers, contracts,
+                compliance policies, licensing applications, and official
+                translations or notarizations where applicable.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div class="card">
-            <div class="card-inner">
-                <div class="card-number">02</div>
-                <div class="card-title">Advisory</div>
-                <div class="card-content">
-                    <h3>Consulting</h3>
-                    <p>Professional advisory sessions.</p>
-                </div>
+          <div class="card-inner">
+            <div class="card-number">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 68 68"
+                fill="none">
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739L20.0786 50.0294ZM52.1341 17.9739V42.0156V17.9739ZM52.1341 17.9739H28.0925H52.1341Z"
+                  fill="white" />
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739M52.1341 17.9739V42.0156M52.1341 17.9739H28.0925"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
+            <div class="card-title">Advisory and compliance checks</div>
+            <div class="card-content">
+              <h3>Advisory and compliance checks</h3>
+              <p>
+                Our team conducts thorough legal and tax reviews to ensure your
+                company meets all local and EU regulations. This includes risk
+                assessments, KYC/AML checks, tax planning guidance, and tailored
+                strategic advice.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div class="card">
-            <div class="card-inner">
-                <div class="card-number">03</div>
-                <div class="card-title">Networking</div>
-                <div class="card-content">
-                    <h3>Private Events</h3>
-                    <p>Curated networking experiences.</p>
-                </div>
+          <div class="card-inner">
+            <div class="card-number">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 68 68"
+                fill="none">
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739L20.0786 50.0294ZM52.1341 17.9739V42.0156V17.9739ZM52.1341 17.9739H28.0925H52.1341Z"
+                  fill="white" />
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739M52.1341 17.9739V42.0156M52.1341 17.9739H28.0925"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
+            <div class="card-title">
+              Liaison with local authorities and regulators
+            </div>
+            <div class="card-content">
+              <h3>Liaison with local authorities and regulators</h3>
+              <p>
+                We handle communication with government bodies, financial
+                regulators, and banks on your behalf — from company registration
+                and licensing to account opening and ongoing compliance support.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div class="card">
-            <div class="card-inner">
-                <div class="card-number">04</div>
-                <div class="card-title">Compliance</div>
-                <div class="card-content">
-                    <h3>Checks</h3>
-                    <p>Legal and compliance review.</p>
-                </div>
+          <div class="card-inner">
+            <div class="card-number">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 68 68"
+                fill="none">
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739L20.0786 50.0294ZM52.1341 17.9739V42.0156V17.9739ZM52.1341 17.9739H28.0925H52.1341Z"
+                  fill="white" />
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739M52.1341 17.9739V42.0156M52.1341 17.9739H28.0925"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
+            <div class="card-title">
+              Ongoing support (if specified in the service)
+            </div>
+            <div class="card-content">
+              <h3>Ongoing support (if specified in the service)</h3>
+              <p>
+                Depending on your package, we provide continuous assistance such
+                as accounting, tax reporting, corporate secretarial services,
+                staff relocation support, and regulatory updates to keep your
+                business compliant.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div class="card">
-            <div class="card-inner">
-                <div class="card-number">05</div>
-                <div class="card-title">Strategy</div>
-                <div class="card-content">
-                    <h3>Planning</h3>
-                    <p>Business strategy sessions.</p>
-                </div>
+          <div class="card-inner">
+            <div class="card-number">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 68 68"
+                fill="none">
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739L20.0786 50.0294ZM52.1341 17.9739V42.0156V17.9739ZM52.1341 17.9739H28.0925H52.1341Z"
+                  fill="white" />
+                <path
+                  d="M20.0786 50.0294L52.1341 17.9739M52.1341 17.9739V42.0156M52.1341 17.9739H28.0925"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
             </div>
+            <div class="card-title">
+              No hidden costs — fixed and transparent pricing
+            </div>
+            <div class="card-content">
+              <h3>No hidden costs — fixed and transparent pricing</h3>
+              <p>
+                Our pricing structure is straightforward: you know exactly
+                what’s included. Government fees, bank charges, or third-party
+                costs are communicated in advance, ensuring there are no
+                unexpected expenses.
+              </p>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        const cards = document.querySelectorAll('.card');
+      const cards = document.querySelectorAll(".card");
 
-        const CLOSED_WIDTH = 128;
-        const OPEN_WIDTH = 808;
+      /* ===== АДАПТИВНЫЕ РАЗМЕРЫ ===== */
+      function getCardSizes() {
+        if (window.matchMedia("(max-width: 840px)").matches) {
+          return {
+            CLOSED: 84,
+            OPEN: 350,
+            INNER_OPEN: "100%",
+            INNER_CLOSED: "100%",
+          };
+        } else if (window.matchMedia("(max-width: 1064px)").matches) {
+          return {
+            CLOSED: 50,
+            OPEN: 350,
+            INNER_OPEN: 420,
+            INNER_CLOSED: 480,
+          };
+        } else if (window.matchMedia("(max-width: 1280px)").matches) {
+          return {
+            CLOSED: 70,
+            OPEN: 540,
+            INNER_OPEN: 500,
+            INNER_CLOSED: 500,
+          };
+        }
 
-        cards.forEach(card => {
-            const inner = card.querySelector('.card-inner');
-            const content = card.querySelector('.card-content');
+        if (window.matchMedia("(max-width: 1650px)").matches) {
+          return {
+            CLOSED: 90,
+            OPEN: 680,
+            INNER_OPEN: 652,
+            INNER_CLOSED: 500,
+          };
+        }
 
-            card.addEventListener('click', () => {
+        return {
+          CLOSED: 128,
+          OPEN: 808,
+          INNER_OPEN: 652,
+          INNER_CLOSED: 500,
+        };
+      }
 
-                cards.forEach(c => {
-                    const i = c.querySelector('.card-inner');
-                    const ct = c.querySelector('.card-content');
+      let {
+        CLOSED: CLOSED_WIDTH,
+        OPEN: OPEN_WIDTH,
+        INNER_OPEN,
+        INNER_CLOSED,
+      } = getCardSizes();
 
-                    gsap.to(c, {
-                        flexBasis: CLOSED_WIDTH,
-                        scaleY: 1,
-                        duration: 0.8,
-                        ease: "power3.out"
-                    });
+      /* ===== ОСНОВНОЕ ОТКРЫТИЕ КАРТОЧКИ ===== */
+      function openCard(card) {
+        cards.forEach((c) => {
+          const inner = c.querySelector(".card-inner");
+          const content = c.querySelector(".card-content");
 
-                    gsap.to(i, {
-                        height: 500,
-                        duration: 0.6,
-                        ease: "power2.out"
-                    });
+          gsap.to(c, {
+            flexBasis: CLOSED_WIDTH,
+            duration: 0.8,
+            ease: "power3.out",
+          });
 
-                    gsap.to(ct, {
-                        opacity: 0,
-                        duration: 0.2
-                    });
+          gsap.to(inner, {
+            height: INNER_CLOSED,
+            duration: 0.6,
+            ease: "power2.out",
+          });
 
-                    c.classList.remove('active');
-                });
+          gsap.to(content, {
+            opacity: 0,
+            duration: 0.2,
+          });
 
-                gsap.to(card, {
-                    flexBasis: OPEN_WIDTH,
-                    scaleY: 1,
-                    duration: 0.9,
-                    ease: "power3.out"
-                });
-
-                gsap.to(inner, {
-                    height: 573,
-                    duration: 0.6,
-                    ease: "power3.out"
-                });
-
-                gsap.to(content, {
-                    opacity: 1,
-                    duration: 0.4,
-                    delay: 0.25
-                });
-
-                card.classList.add('active');
-            });
+          c.classList.remove("active");
         });
+
+        const inner = card.querySelector(".card-inner");
+        const content = card.querySelector(".card-content");
+
+        gsap.to(card, {
+          flexBasis: OPEN_WIDTH,
+          duration: 0.9,
+          ease: "power3.out",
+        });
+
+        gsap.to(inner, {
+          height: INNER_OPEN,
+          duration: 0.6,
+          ease: "power3.out",
+        });
+
+        gsap.to(content, {
+          opacity: 1,
+          duration: 0.4,
+          delay: 0.25,
+        });
+
+        card.classList.add("active");
+      }
+
+      /* ===== RESIZE БЕЗ СБРОСА СОСТОЯНИЯ ===== */
+      function resizeActiveCard() {
+        const active = document.querySelector(".card.active");
+        if (!active) return;
+
+        const inner = active.querySelector(".card-inner");
+
+        gsap.to(active, {
+          flexBasis: OPEN_WIDTH,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+
+        gsap.to(inner, {
+          height: INNER_OPEN,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      }
+
+      /* ===== КЛИКИ ===== */
+      cards.forEach((card) => {
+        card.addEventListener("click", () => openCard(card));
+      });
+
+      /* ===== ИНИЦИАЛИЗАЦИЯ ===== */
+      window.addEventListener("load", () => {
+        openCard(cards[0]);
+      });
+
+      /* ===== ОБРАБОТКА RESIZE ===== */
+      window.addEventListener("resize", () => {
+        const prevOpen = OPEN_WIDTH;
+
+        ({
+          CLOSED: CLOSED_WIDTH,
+          OPEN: OPEN_WIDTH,
+          INNER_OPEN,
+          INNER_CLOSED,
+        } = getCardSizes());
+
+        if (prevOpen !== OPEN_WIDTH) {
+          resizeActiveCard();
+        }
+      });
     </script>
-
-</body>
-
+  </body>
 </html>
