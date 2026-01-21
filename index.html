@@ -163,7 +163,6 @@
 
       .card {
         flex: 0 0 128px;
-        /* ЗАКРЫТОЕ СОСТОЯНИЕ */
         height: 652px;
         border-radius: 30px;
         background: #2f3135;
@@ -176,7 +175,7 @@
 
       .card.active {
         border-radius: 32px;
-        background-image: url(./grid.png);
+        background-image: url(../grid.png);
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -538,7 +537,6 @@
     <script>
       const cards = document.querySelectorAll(".card");
 
-      /* ===== АДАПТИВНЫЕ РАЗМЕРЫ ===== */
       function getCardSizes() {
         if (window.matchMedia("(max-width: 840px)").matches) {
           return {
@@ -587,7 +585,6 @@
         INNER_CLOSED,
       } = getCardSizes();
 
-      /* ===== ОСНОВНОЕ ОТКРЫТИЕ КАРТОЧКИ ===== */
       function openCard(card) {
         cards.forEach((c) => {
           const inner = c.querySelector(".card-inner");
@@ -637,7 +634,6 @@
         card.classList.add("active");
       }
 
-      /* ===== RESIZE БЕЗ СБРОСА СОСТОЯНИЯ ===== */
       function resizeActiveCard() {
         const active = document.querySelector(".card.active");
         if (!active) return;
@@ -657,17 +653,14 @@
         });
       }
 
-      /* ===== КЛИКИ ===== */
       cards.forEach((card) => {
         card.addEventListener("click", () => openCard(card));
       });
 
-      /* ===== ИНИЦИАЛИЗАЦИЯ ===== */
       window.addEventListener("load", () => {
         openCard(cards[0]);
       });
 
-      /* ===== ОБРАБОТКА RESIZE ===== */
       window.addEventListener("resize", () => {
         const prevOpen = OPEN_WIDTH;
 
@@ -685,3 +678,4 @@
     </script>
   </body>
 </html>
+
